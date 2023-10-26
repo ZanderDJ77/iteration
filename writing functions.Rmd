@@ -1,0 +1,126 @@
+---
+title: "writing functions"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(p8105.datasets)
+
+```
+
+Set seed for reproducibility
+
+```{r}
+set.seed(12345)
+```
+
+
+### Z Score Function
+
+z scores subtract the mean and divide by the standard deviation
+
+```{r}
+x_vec = rnorm(20, mean = 5, sd = .3)
+```
+
+Basic Compute Z scores for `x_vec`
+
+```{r}
+(x_vec - mean(x_vec))/sd(x_vec)
+```
+
+
+Write a function to do this
+
+```{r}
+z_score = function(x) {
+  
+  if(!is.numeric(x)) {
+    stop("Argument x should be numeric")} 
+  else if (length(x) == 1) {
+    stop("Cannot be computed for length 1 vectors")}
+  z = ((x - mean(x))/sd(x))
+  
+  z
+}
+```
+
+Check that this works
+
+```{r}
+z_score(x = x_vec)
+
+z_score(x = rnorm(10, mean = 5))
+```
+Keep checking
+```{r eval = FALSE}
+z_score(x = 3)
+
+z_score(c("hello", "there"))
+
+z_score(c(TRUE, TRUE, FALSE, TRUE))
+
+z_score(iris)
+```
+
+
+## Multiple Outputs
+
+Write a function that returns the mean and sd from a sample of numbers
+
+
+```{r}
+mean_and_sd = function(x) {
+  
+    if(!is.numeric(x)) {
+    stop("Argument x should be numeric")} 
+  else if (length(x) < 2) {
+    stop("Cannot be computed for length 1 vectors")}
+  
+  mean_x = mean(x)
+  sd_x = sd(x)
+  
+  tibble(
+    mean = mean_x,
+    sd = sd_x
+  )
+}
+```
+
+Double check
+
+```{r}
+mean_and_sd(x= x_vec)
+```
+
+
+### Start getting means and sds
+
+```{r}
+x_vec = rnorm(n = 30, mean = 5, sd = 0.5)
+
+tibble(
+  mean = mean(x_vec),
+  sd = sd(x_vec)
+)
+```
+
+Create a function that uses 'n' a true mean, and true SD as inputs
+
+```{r}
+sim_mean_sd = function(n_obs, mu, sigma) {
+  
+  x_vec = rnorm(n = n_obs, mean = mu, sd = sigma)
+
+tibble(
+  mean = mean(x_vec),
+  sd = sd(x_vec)
+)
+  
+}
+
+sim_mean_sd(n_obs = 3000, mu = 50, sigma = 5)
+```
+
